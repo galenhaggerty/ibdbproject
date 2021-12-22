@@ -1,0 +1,46 @@
+---
+title: "R Final Project"
+author: "Galen haggerty"
+date: "12/15/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+This is my R Notebook for my final project regression
+
+I am importing the necessary packages below:
+
+```{r}
+library(tidyverse)
+```
+I am uploading my final data
+```{r}
+finaldata = read.csv('/Users/galenhaggerty/Documents/GitHub/final-project-galenhaggerty/finaldata.csv')
+```
+Running my OLS regression
+
+Gross Potential is my independent variable and my dependent variables are the Average Price (Gross/Attendance), average capacity, whether the show was an original or revival, and how many Tony's the production won.
+```{r}
+final <- lm(X..Gross.Pot. ~  Av..Price + X..Capacity + factor(Original.Revival) + Tonys , data = finaldata)
+summary(final)
+```
+Results show 3 significant variables (Average Price, Capacity, and Tonys)
+
+R^2 = .767, therefore we can explain away about 76.7% of the results
+
+The average price of a ticket increasing by 1 dollar will increase gross potential by .12 percentage points (so if the average price of a ticket goes up by 10 dollars, you will see about a 1.2 percentage points increase towards gross potential revenue)
+
+Unsurprisingly, a 1% increase in seats filled (capacity) will result in about a 1.2 percentage points increase in the gross potential
+
+Winning 1 extra Tony award will increase the gross potential of a show by about 1.87 percentage points
+
+Below is the output using stargazer:
+```{r}
+library(stargazer)
+stargazer(final, type="text",
+          title            = "Broadway Data Results",
+          covariate.labels = c("Average Price", "Capacity", "Original/Revival", "Tonys", "Constant"),
+          dep.var.labels   = "Gross Potential")
+```
